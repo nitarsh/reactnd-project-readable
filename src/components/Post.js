@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import { Helmet } from "react-helmet"
 
 class Post extends Component {
+
+    componentDidMount() {
+        console.log(this.props)
+        console.log(this.props.match.params.id)
+    }
+
     render() {
         return (
             <div className="post-wrapper container column">
@@ -16,7 +22,7 @@ class Post extends Component {
                     </div>
 
                     <h1>
-                        {this.props.params}
+
                     </h1>
                 </div>
                 <div className="post-body">

@@ -1,3 +1,8 @@
+import * as API from '../utils/api'
+
+export const SET_CATEGORIES = 'SET_CATEGORIES'
+
+export const SET_POSTS = 'SET_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
@@ -8,7 +13,12 @@ export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 
-
+export function setCategories({ categories }) {
+    return { type: SET_CATEGORIES, categories }
+}
+export function setPosts({ posts }) {
+    return { type: SET_POSTS, posts }
+}
 export function addPost({ category, post }) {
     return { type: ADD_POST, category, post }
 }
@@ -33,4 +43,20 @@ export function editComment({ comment }) {
 }
 export function voteComment({ comment, vote }) {
     return { type: VOTE_COMMENT, comment, vote }
+}
+
+export function fetchCategoriesForHomePage() {
+    return function (dispatch) {
+        return API.categories().then(
+            categories => dispatch(setCategories({categories}))
+        );
+    };
+}
+
+export function fetchPosts() {
+    return function (dispatch) {
+        return API.posts().then(
+            posts => dispatch(setPosts({posts}))
+        );
+    };
 }
