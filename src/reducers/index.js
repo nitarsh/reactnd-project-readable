@@ -2,14 +2,16 @@
 import { combineReducers } from 'redux'
 import {
     SET_POSTS,
-    ADD_POST,
+    SET_ACTIVE_POST,
     SET_CATEGORIES,
+    SET_COMMENTS
 } from '../actions'
 
 const initialPostState = {
     byId: {},
     allIds: [],
-    byCategory: {}
+    byCategory: {},
+    active: { voteScore: 0, title: '', body: '' }
 }
 
 function posts(state = initialPostState, action) {
@@ -18,9 +20,6 @@ function posts(state = initialPostState, action) {
             let allPostIds = []
             let categories = [...new Set(action.posts.map(p => p.category))]
             let postIdsByCategory = categories.reduce((s, c) => { s[c] = []; return s }, {})
-            console.log("categories:")
-            console.log(categories)
-            console.log(postIdsByCategory)
             let byId = {}
             for (let post of action.posts) {
                 allPostIds.push(post.id)
@@ -33,8 +32,11 @@ function posts(state = initialPostState, action) {
                 allIds: allPostIds,
                 byCategory: postIdsByCategory
             }
-        case ADD_POST:
-            return state
+        case SET_ACTIVE_POST:
+            return {
+                ...state,
+                active: state.byId[action.postId]
+            }
         default:
             return state
     }
@@ -54,13 +56,24 @@ function categories(state = [], action) {
     }
 }
 
-const initialCategoryState = {
+const initialCommentsState = {
     byId: {},
-    byPost: []
+    byPost: {}
 }
 
-function comments(state = [], action) {
-    return state
+function comments(state = initialCommentsState, action) {
+    switch (action.type) {
+        case SET_COMMENTS:
+            return {
+                ...state,
+                byPost: {
+                    ...state.byPost,
+                    [action.postId]: action.comments
+                }
+            }
+        default:
+            return state
+    }
 }
 
 export default combineReducers({

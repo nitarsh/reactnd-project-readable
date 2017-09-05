@@ -3,11 +3,13 @@ import * as API from '../utils/api'
 export const SET_CATEGORIES = 'SET_CATEGORIES'
 
 export const SET_POSTS = 'SET_POSTS'
+export const SET_ACTIVE_POST = 'SET_ACTIVE_POST'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 
+export const SET_COMMENTS = 'SET_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
@@ -32,6 +34,9 @@ export function votePost({ post, vote }) {
     return { type: VOTE_POST, post, vote }
 }
 
+export function setComments({ postId, comments }) {
+    return { type: SET_COMMENTS, postId, comments }
+}
 export function addComment({ post, comment }) {
     return { type: ADD_COMMENT, post, comment }
 }
@@ -44,11 +49,14 @@ export function editComment({ comment }) {
 export function voteComment({ comment, vote }) {
     return { type: VOTE_COMMENT, comment, vote }
 }
+export function setActivePost({ postId }) {
+    return { type: SET_ACTIVE_POST, postId }
+}
 
 export function fetchCategoriesForHomePage() {
     return function (dispatch) {
         return API.categories().then(
-            categories => dispatch(setCategories({categories}))
+            categories => dispatch(setCategories({ categories }))
         );
     };
 }
@@ -56,7 +64,15 @@ export function fetchCategoriesForHomePage() {
 export function fetchPosts() {
     return function (dispatch) {
         return API.posts().then(
-            posts => dispatch(setPosts({posts}))
+            posts => dispatch(setPosts({ posts }))
+        );
+    };
+}
+
+export function fetchCommentsForPost({ postId }) {
+    return function (dispatch) {
+        return API.commentsByPost(postId).then(
+            comments => dispatch(setComments({ postId, comments }))
         );
     };
 }

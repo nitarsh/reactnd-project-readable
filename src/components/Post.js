@@ -1,11 +1,33 @@
 import React, { Component } from 'react'
 import { Helmet } from "react-helmet"
+import { connect } from 'react-redux'
+import * as Actions from '../actions'
+import CommentList from './CommentList'
+
+const mapStateToProps = function (state) {
+    return {
+        post: state.posts.active,
+        comments: state.comments
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchComments: (postId) => dispatch(Actions.fetchCommentsForPost(postId)),
+        fetchPosts: () => dispatch(Actions.fetchPosts()),
+        setActivePost: (postId) => dispatch(Actions.setActivePost(postId))
+    }
+}
 
 class Post extends Component {
 
     componentDidMount() {
-        console.log(this.props)
-        console.log(this.props.match.params.id)
+        let postId = { postId: this.props.match.params.id }
+        this.props.fetchPosts().then(() => {
+            this.props.setActivePost(postId)
+            console.log(this.props.post)
+        })
+        this.props.fetchComments(postId)
     }
 
     render() {
@@ -17,22 +39,22 @@ class Post extends Component {
                 <div className="post-header container column">
                     <div className="container column">
                         <i className="fa fa-arrow-up" aria-hidden="true"></i>
-                        <span>12</span>
+                        <span>{this.props.post.voteScore}</span>
                         <i className="fa fa-arrow-down" aria-hidden="true"></i>
                     </div>
-
                     <h1>
-
+                        {this.props.post.title}
                     </h1>
                 </div>
                 <div className="post-body">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {this.props.post.body}
                     </p>
                 </div>
+                <CommentList comments={this.props.comments.byPost[this.props.match.params.id] || []} />
             </div>
         )
     }
 }
 
-export default Post
+export default connect(mapStateToProps, mapDispatchToProps)(Post)

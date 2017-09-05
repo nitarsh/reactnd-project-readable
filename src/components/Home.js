@@ -8,9 +8,8 @@ import * as Actions from '../actions'
 
 const mapStateToProps = function (state) {
     return {
-        posts: state.posts,
         categories: state.categories,
-        comments: state.comments,
+        posts: state.posts
     }
 }
 
