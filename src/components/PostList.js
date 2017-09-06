@@ -6,6 +6,9 @@ class PostOutlineList extends Component {
         const { posts } = this.props
         return (
             <div className="post-list-wrapper">
+                <Link to="/form/post/new" className="post-link">
+                    <i className="fa fa-plus" aria-hidden="true"></i>
+                </Link>
                 <ul className="post-list">
                     {posts.map((post) => (
                         <li key={post.id}><PostOutline post={post} /></li>

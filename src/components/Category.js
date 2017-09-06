@@ -1,29 +1,24 @@
 import React, { Component } from 'react'
-import './App.css'
 import { connect } from 'react-redux'
-import CategoryList from './CategoryList'
 import PostList from './PostList'
 import * as Actions from '../actions'
 
 const mapStateToProps = function (state) {
     return {
-        categories: state.categories,
         posts: state.posts
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchCategories: () => dispatch(Actions.fetchCategoriesForHomePage()),
         fetchPosts: () => dispatch(Actions.fetchPosts()),
     }
 }
 
-class Home extends Component {
+class Category extends Component {
 
     componentDidMount() {
         console.log(this.props)
-        this.props.fetchCategories()
         this.props.fetchPosts()
     }
 
@@ -31,11 +26,10 @@ class Home extends Component {
     render() {
         return (
             <div className="container">
-                <section className="sidebar">
-                    <CategoryList categories={this.props.categories} />
-                </section>
                 <section className="main">
-                    <PostList posts={this.props.posts.allIds.map(id => this.props.posts.byId[id])} />
+                    <PostList posts={
+                        this.props.posts.byCategory[this.props.match.params.id] && this.props.posts.byCategory[this.props.match.params.id].map(postId => this.props.posts.byId[postId]) || []
+                    } />
                 </section>
             </div>
         )
@@ -45,4 +39,4 @@ class Home extends Component {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Category)

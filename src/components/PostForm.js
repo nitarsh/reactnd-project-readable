@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import * as Actions from '../actions'
 import CommentList from './CommentList'
@@ -7,36 +8,33 @@ import Modal from 'react-modal'
 const mapStateToProps = function (state) {
     return {
         post: state.posts.active,
-        comments: state.comments
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchComments: (postId) => dispatch(Actions.fetchCommentsForPost(postId)),
-        fetchPosts: () => dispatch(Actions.fetchPosts()),
-        setActivePost: (postId) => dispatch(Actions.setActivePost(postId))
+        fetchPosts: () => dispatch(Actions.fetchPosts())
     }
 }
 
-class Post extends Component {
-
-    _fetchPostsAndComments(postId) {
-        this.props.fetchPosts().then(() => {
-            this.props.setActivePost(postId)
-            console.log(this.props.post)
-        })
-        this.props.fetchComments(postId)
-    }
+class PostForm extends Component {
 
     componentDidMount() {
-        let postId = { postId: this.props.match.params.id }
-        this._fetchPostsAndComments(postId)
+        console.log("params:")
+        console.log(this.props.match.params)
+        // if mode is edit, then load the required post and prefill
+        // else leave it empty (for new post)
+        // this.props.fetchPosts().then(() => {
+        //     this.props.setActivePost(postId)
+        //     console.log(this.props.post)
+        // })
     }
 
     render() {
         return (
+            
             <div className="post-wrapper container column">
+            <div>Hello WOrld</div>
                 <div className="post-header container column">
                     <div className="container column">
                         <i className="fa fa-arrow-up" aria-hidden="true"></i>
@@ -52,10 +50,9 @@ class Post extends Component {
                         {this.props.post.body}
                     </p>
                 </div>
-                <CommentList comments={this.props.comments.byPost[this.props.match.params.id] || []} />
             </div>
         )
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post)
+export default connect(mapStateToProps, mapDispatchToProps)(PostForm)
