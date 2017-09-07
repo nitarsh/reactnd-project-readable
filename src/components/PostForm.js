@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import * as Actions from '../actions'
-import CommentList from './CommentList'
-import Modal from 'react-modal'
 
 const mapStateToProps = function (state) {
     return {

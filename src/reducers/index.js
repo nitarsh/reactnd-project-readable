@@ -3,14 +3,16 @@ import {
     SET_POSTS,
     SET_ACTIVE_POST,
     SET_CATEGORIES,
-    SET_COMMENTS
+    SET_COMMENTS,
+    VOTE_COMMENT,
+    VOTE_POST
 } from '../actions'
 
 const initialPostState = {
     byId: {},
     allIds: [],
     byCategory: {},
-    active: { voteScore: 0, title: '', body: '' }
+    active: ''
 }
 
 function posts(state = initialPostState, action) {
@@ -34,22 +36,33 @@ function posts(state = initialPostState, action) {
         case SET_ACTIVE_POST:
             return {
                 ...state,
-                active: state.byId[action.postId]
+                active: action.postId
+            }
+        case VOTE_POST:
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.postId]: {
+                        ...state.byId[action.postId],
+                        voteScore: state.byId[action.postId].voteScore + action.vote
+                    }
+                }
             }
         default:
             return state
     }
 }
 
-
+// const initialCategoryState = {
+//     byPath: {},
+//     all: []
+// }
 
 function categories(state = [], action) {
-    console.log(state)
-    console.log(action)
     switch (action.type) {
         case SET_CATEGORIES:
-            console.log(action.categories)
-            return state.concat(action.categories)
+            return action.categories
         default:
             return state
     }
@@ -63,11 +76,27 @@ const initialCommentsState = {
 function comments(state = initialCommentsState, action) {
     switch (action.type) {
         case SET_COMMENTS:
+            let commentIds = action.comments.map(c => c.id)
+            action.comments.forEach(function (comment) {
+                if (comment.id)
+                    state.byId[comment.id] = comment
+            });
             return {
                 ...state,
                 byPost: {
                     ...state.byPost,
-                    [action.postId]: action.comments
+                    [action.postId]: commentIds
+                }
+            }
+        case VOTE_COMMENT:
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.commentId]: {
+                        ...state.byId[action.commentId],
+                        voteScore: state.byId[action.commentId].voteScore + action.vote
+                    }
                 }
             }
         default:

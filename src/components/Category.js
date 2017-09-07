@@ -12,24 +12,32 @@ const mapStateToProps = function (state) {
 function mapDispatchToProps(dispatch) {
     return {
         fetchPosts: () => dispatch(Actions.fetchPosts()),
+        votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote }))
     }
 }
 
 class Category extends Component {
 
     componentDidMount() {
-        console.log(this.props)
         this.props.fetchPosts()
+    }
+
+    _posts_filtered_by_category(posts, category) {
+        return posts.byCategory[category] ? 
+        posts.byCategory[category].map(postId => posts.byId[postId]) : []
     }
 
 
     render() {
+        const { votePost, posts, match } = this.props
+        const postList = this._posts_filtered_by_category(posts, match.params.id)
         return (
             <div className="container">
                 <section className="main">
-                    <PostList posts={
-                        this.props.posts.byCategory[this.props.match.params.id] && this.props.posts.byCategory[this.props.match.params.id].map(postId => this.props.posts.byId[postId]) || []
-                    } />
+                    <PostList
+                        posts={postList}
+                        updateVoteScore={votePost}
+                    />
                 </section>
             </div>
         )

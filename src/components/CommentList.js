@@ -1,13 +1,16 @@
 import React from 'react'
+import { Score } from './Misc'
 
-function CommentList({ comments }) {
+function CommentList({ comments, voteComment }) {
     return (
         <div className="comment-list-wrapper">
             <h3>Comments:</h3>
             <ul className="comment-list">
                 {comments.map((comment) => (
                     <li key={comment.id}>
-                        <Comment comment={comment} />
+                        <Comment
+                            comment={comment}
+                            voteComment={voteComment} />
                     </li>
                 ))}
             </ul>
@@ -15,15 +18,15 @@ function CommentList({ comments }) {
     )
 }
 
-function Comment({ comment }) {
+function Comment({ comment, voteComment }) {
     return (
         <div className="comment-wrapper container column">
-            <div className="comment-header container column">
-                <div className="container column">
-                    <i className="fa fa-arrow-up" aria-hidden="true"></i>
-                    <span>{comment.voteScore}</span>
-                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                </div>
+            <div className="comment-header container row v-center">
+                <Score
+                    id={comment.id}
+                    value={comment.voteScore}
+                    onClickFn={voteComment}
+                />
                 <h4>
                     {comment.author}
                 </h4>

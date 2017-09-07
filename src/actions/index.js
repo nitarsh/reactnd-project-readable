@@ -30,8 +30,8 @@ export function deletePost({ post }) {
 export function editPost({ post }) {
     return { type: EDIT_POST, post }
 }
-export function votePost({ post, vote }) {
-    return { type: VOTE_POST, post, vote }
+export function votePost({ postId, vote }) {
+    return { type: VOTE_POST, postId, vote }
 }
 
 export function setComments({ postId, comments }) {
@@ -46,8 +46,8 @@ export function deleteComment({ comment }) {
 export function editComment({ comment }) {
     return { type: EDIT_COMMENT, comment }
 }
-export function voteComment({ comment, vote }) {
-    return { type: VOTE_COMMENT, comment, vote }
+export function voteComment({ commentId, vote }) {
+    return { type: VOTE_COMMENT, commentId, vote }
 }
 export function setActivePost({ postId }) {
     return { type: SET_ACTIVE_POST, postId }
@@ -73,6 +73,26 @@ export function fetchCommentsForPost({ postId }) {
     return function (dispatch) {
         return API.commentsByPost(postId).then(
             comments => dispatch(setComments({ postId, comments }))
+        );
+    };
+}
+
+const _isUpvote = vote => vote > 0 ? true : false
+
+export function voteOnPost({ postId, vote }) {
+    let isUpvote = vote > 0 ? true : false
+    return function (dispatch) {
+        return API.updatePostScore(postId, isUpvote).then(
+            dispatch(votePost({ postId, vote }))
+        );
+    };
+}
+
+export function voteOnComment({ commentId, vote }) {
+    let isUpvote = vote > 0 ? true : false
+    return function (dispatch) {
+        return API.updateCommentScore(commentId, isUpvote).then(
+            dispatch(voteComment({ commentId, vote }))
         );
     };
 }

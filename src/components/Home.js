@@ -16,26 +16,31 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchCategories: () => dispatch(Actions.fetchCategoriesForHomePage()),
         fetchPosts: () => dispatch(Actions.fetchPosts()),
+        votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote }))
     }
 }
 
 class Home extends Component {
 
     componentDidMount() {
-        console.log(this.props)
         this.props.fetchCategories()
         this.props.fetchPosts()
     }
 
 
     render() {
+        const { categories, votePost, posts } = this.props
+        const postList = posts.allIds.map(id => posts.byId[id])
         return (
             <div className="container">
                 <section className="sidebar">
-                    <CategoryList categories={this.props.categories} />
+                    <CategoryList categories={categories} />
                 </section>
                 <section className="main">
-                    <PostList posts={this.props.posts.allIds.map(id => this.props.posts.byId[id])} />
+                    <PostList
+                        posts={postList}
+                        updateVoteScore={votePost}
+                    />
                 </section>
             </div>
         )
