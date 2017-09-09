@@ -7,12 +7,14 @@ import * as Actions from '../actions'
 const mapStateToProps = function (state) {
     return {
         categories: state.categories,
-        posts: state.posts
+        posts: state.posts,
+        comments: state.comments.byPost
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
+        fetchComments: (postId) => dispatch(Actions.fetchCommentsForPost(postId)),
         fetchCategories: () => dispatch(Actions.fetchCategoriesForHomePage()),
         fetchPosts: () => dispatch(Actions.fetchPosts()),
         votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote }))
@@ -22,9 +24,12 @@ function mapDispatchToProps(dispatch) {
 class Category extends Component {
 
     componentDidMount() {
-        console.log("Hello World")
         this.props.fetchCategories()
-        this.props.fetchPosts()
+        this.props.fetchPosts().then(() => {
+            this.props.posts.allIds.forEach(function(postId) {
+                this.props.fetchComments({postId})
+            }, this);
+        })
     }
 
     _posts(posts, category) {
@@ -40,7 +45,7 @@ class Category extends Component {
     }
 
     render() {
-        const { categories, votePost, posts, match } = this.props
+        const { categories, votePost, posts, match, comments } = this.props
         const postList = this._posts(posts, match.params.category)
         return (
             <div className="container">
@@ -51,6 +56,7 @@ class Category extends Component {
                     <PostList
                         posts={postList}
                         updateVoteScore={votePost}
+                        comments={comments}
                     />
                 </section>
             </div>

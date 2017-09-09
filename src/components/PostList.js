@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Score } from './Misc'
 
-function PostOutlineList({ posts, updateVoteScore }) {
+function PostOutlineList({ posts, updateVoteScore, comments }) {
     return (
         <div className="post-list-wrapper">
             <Link to="/form/post/new" className="post-link">
@@ -11,9 +11,11 @@ function PostOutlineList({ posts, updateVoteScore }) {
             <ul className="post-list">
                 {posts.map((post) => (
                     <li key={post.id}>
+
                         <PostOutline
                             post={post}
                             updateVoteScore={updateVoteScore}
+                            comments={comments[post.id]}
                         />
                     </li>
                 ))}
@@ -23,7 +25,7 @@ function PostOutlineList({ posts, updateVoteScore }) {
 }
 
 
-function PostOutline({ post, updateVoteScore }) {
+function PostOutline({ post, updateVoteScore, comments }) {
     return (
         <div className="post-outline-wrapper container v-center compressed">
             <Score
@@ -35,9 +37,15 @@ function PostOutline({ post, updateVoteScore }) {
                 <Link to={"/post/" + post.id} className="post-link">
                     <h2>{post.title}</h2>
                 </Link>
-                <span>
-                    Author: {post.author}
-                </span>
+                <div>
+                    <span>
+                        Author: {post.author}
+                    </span>
+                    <span>
+                        Num comments: {comments && comments.length}
+                    </span>
+                </div>
+
             </div>
             <div className="container column">
                 <i

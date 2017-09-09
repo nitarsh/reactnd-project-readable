@@ -29,7 +29,6 @@ class Post extends Component {
     _fetchPostsAndComments(postId) {
         this.props.fetchPosts().then(() => {
             this.props.setActivePost(postId)
-            console.log(this.props.post)
         })
         this.props.fetchComments(postId)
     }
