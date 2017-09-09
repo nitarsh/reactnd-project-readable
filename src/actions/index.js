@@ -7,6 +7,7 @@ export const SET_ACTIVE_POST = 'SET_ACTIVE_POST'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
+export const UPDATE_POST_FORM = 'UPDATE_POST_FORM'
 export const VOTE_POST = 'VOTE_POST'
 
 export const SET_COMMENTS = 'SET_COMMENTS'
@@ -24,11 +25,14 @@ export function setPosts({ posts }) {
 export function addPost({ category, post }) {
     return { type: ADD_POST, category, post }
 }
-export function deletePost({ post }) {
-    return { type: DELETE_POST, post }
+export function removePost({ postId }) {
+    return { type: DELETE_POST, postId }
 }
 export function editPost({ post }) {
     return { type: EDIT_POST, post }
+}
+export function updatePostForm({ attribute, value }) {
+    return { type: UPDATE_POST_FORM, attribute, value }
 }
 export function votePost({ postId, vote }) {
     return { type: VOTE_POST, postId, vote }
@@ -77,8 +81,6 @@ export function fetchCommentsForPost({ postId }) {
     };
 }
 
-const _isUpvote = vote => vote > 0 ? true : false
-
 export function voteOnPost({ postId, vote }) {
     let isUpvote = vote > 0 ? true : false
     return function (dispatch) {
@@ -93,6 +95,14 @@ export function voteOnComment({ commentId, vote }) {
     return function (dispatch) {
         return API.updateCommentScore(commentId, isUpvote).then(
             dispatch(voteComment({ commentId, vote }))
+        );
+    };
+}
+
+export function deletePost({ postId }) {
+    return function (dispatch) {
+        return API.deletePost(postId).then(
+            dispatch(removePost({ postId }))
         );
     };
 }

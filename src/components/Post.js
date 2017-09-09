@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import * as Actions from '../actions'
 import CommentList from './CommentList'
 import { Score } from './Misc'
@@ -42,6 +43,10 @@ class Post extends Component {
         return comments.byPost[postId] ? comments.byPost[postId].map(cId => comments.byId[cId]) : []
     }
 
+    onDelete(postId) {
+        this.props.deletePost({ postId })
+    }
+
     render() {
         const { comments, post, voteComment, votePost, match } = this.props
         const commentList = this._comments_for_post(comments, match.params.id)
@@ -59,10 +64,26 @@ class Post extends Component {
                                 {post.title}
                             </h1>
                             <div className="container column">
-                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                <Link to="/" className="post-link">
+                                    <i
+                                        className="fa fa-trash"
+                                        aria-hidden="true"
+                                        onClick={() => this.onDelete(post.id)}
+                                        style={{ margin: 10 }}
+                                    />
+                                </Link>
                             </div>
+
                             <div className="container column">
-                                <i className="fa fa-pencil" aria-hidden="true"></i>
+                                <Link
+                                    to="/form/post/edit"
+                                    className="post-link"
+                                >
+                                    <i
+                                        className="fa fa-pencil"
+                                        aria-hidden="true"
+                                    />
+                                </Link>
                             </div>
                         </div>
                         <div className="post-body">

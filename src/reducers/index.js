@@ -5,14 +5,22 @@ import {
     SET_CATEGORIES,
     SET_COMMENTS,
     VOTE_COMMENT,
-    VOTE_POST
+    VOTE_POST,
+    UPDATE_POST_FORM,
+    DELETE_POST
 } from '../actions'
 
 const initialPostState = {
     byId: {},
     allIds: [],
     byCategory: {},
-    active: ''
+    active: '',
+    postForm: {
+        id: '',
+        title: '',
+        body: '',
+        voteScore: 0
+    }
 }
 
 function posts(state = initialPostState, action) {
@@ -49,15 +57,21 @@ function posts(state = initialPostState, action) {
                     }
                 }
             }
+        case UPDATE_POST_FORM:
+            return {
+                ...state,
+                postForm: {
+                    ...state.postForm,
+                    [action.attribute]: action.value
+                }
+            }
+        case DELETE_POST:
+            state.byId[action.postId].deleted = true
+            return state
         default:
             return state
     }
 }
-
-// const initialCategoryState = {
-//     byPath: {},
-//     all: []
-// }
 
 function categories(state = [], action) {
     switch (action.type) {

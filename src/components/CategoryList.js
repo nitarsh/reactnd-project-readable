@@ -7,7 +7,7 @@ function CategoryList({ categories }) {
             <ul className="category-list">
                 {categories.map((category) => (
                     <li key={category.name}>
-                        <Link to={"/category/" + category.name} className="post-link">
+                        <Link to={"/" + category.name} className="post-link">
                             <span>{category.name}</span>
                         </Link>
                     </li>

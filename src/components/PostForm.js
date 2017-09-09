@@ -3,51 +3,71 @@ import { connect } from 'react-redux'
 import * as Actions from '../actions'
 
 const mapStateToProps = function (state) {
+
     return {
-        post: state.posts.active,
+        postForm: state.posts.postForm,
+        post: state.posts.byId[state.posts.active]
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchPosts: () => dispatch(Actions.fetchPosts())
+        fetchPosts: () => dispatch(Actions.fetchPosts()),
+        updatePostForm: (attribute, value) => dispatch(Actions.updatePostForm({ attribute, value }))
     }
 }
 
 class PostForm extends Component {
 
     componentDidMount() {
-        console.log("params:")
-        console.log(this.props.match.params)
-        // if mode is edit, then load the required post and prefill
-        // else leave it empty (for new post)
-        // this.props.fetchPosts().then(() => {
-        //     this.props.setActivePost(postId)
-        //     console.log(this.props.post)
-        // })
+        if (this.props.match.params.mode === 'edit' && this.props.post) {
+            this.props.fetchPosts().then(() => {
+                this.props.updatePostForm('title', this.props.post.title)
+                this.props.updatePostForm('voteScore', this.props.post.voteScore)
+                this.props.updatePostForm('body', this.props.post.body)
+            })
+        }
+    }
+
+    handleChange(event) {
+        const { id, value } = event.target
+        this.props.updatePostForm(id, value)
     }
 
     render() {
+        const { postForm } = this.props
         return (
-            
-            <div className="post-wrapper container column">
-            <div>Hello WOrld</div>
-                <div className="post-header container column">
-                    <div className="container column">
-                        <i className="fa fa-arrow-up" aria-hidden="true"></i>
-                        <span>{this.props.post.voteScore}</span>
-                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                    </div>
-                    <h1>
-                        {this.props.post.title}
-                    </h1>
+            <form action="">
+                <div className="post-wrapper container column">
+                    <label>
+                        Title:
+                        <input
+                            id="title"
+                            type="text"
+                            value={postForm.title}
+                            onChange={(event) => this.handleChange(event)}
+                        />
+                    </label>
+                    <label>
+                        Body:
+                        <textarea
+                            id="body"
+                            value={postForm.body}
+                            onChange={(event) => this.handleChange(event)}
+                        />
+                    </label>
+                    <label>
+                        Score:
+                        <input
+                            id="voteScore"
+                            type="number"
+                            value={postForm.voteScore}
+                            onChange={(event) => this.handleChange(event)}
+                        />
+                    </label>
+                    <input style={{ width: 100 }} type="submit" value="Submit" />
                 </div>
-                <div className="post-body">
-                    <p>
-                        {this.props.post.body}
-                    </p>
-                </div>
-            </div>
+            </form>
         )
     }
 }

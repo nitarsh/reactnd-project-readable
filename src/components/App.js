@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet"
 import './App.css'
 import Post from './Post'
 import PostForm from './PostForm'
-import Home from './Home'
+// import Home from './Home'
 import Category from './Category'
 
 class App extends Component {
@@ -14,13 +14,14 @@ class App extends Component {
                 <Helmet>
                     <script src="https://use.fontawesome.com/9fdf74825d.js"></script>
                 </Helmet>
-                <Route exact path='/' component={Home} />
+                <Route exact path='/' component={Category} />
+                <Route exact path='/:category' component={Category} />
                 <Route exact path='/post/:id' component={Post} />
                 <Route exact path='/form/post/:mode' component={PostForm} />
-                <Route exact path='/category/:id' component={Category} />
             </div>
         )
     }
 }
+// <Route exact path='/category/:id' component={Category} />
 
 export default App

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Score } from './Misc'
 
@@ -31,9 +31,33 @@ function PostOutline({ post, updateVoteScore }) {
                 value={post.voteScore}
                 onClickFn={updateVoteScore}
             />
-            <Link to={"/post/" + post.id} className="post-link">
-                <h2>{post.title}</h2>
-            </Link>
+            <div className="container column">
+                <Link to={"/post/" + post.id} className="post-link">
+                    <h2>{post.title}</h2>
+                </Link>
+                <span>
+                    Author: {post.author}
+                </span>
+            </div>
+            <div className="container column">
+                <i
+                    className="fa fa-trash"
+                    aria-hidden="true"
+                    style={{ margin: 10 }}
+                />
+            </div>
+
+            <div className="container column">
+                <Link
+                    to="/form/post/edit"
+                    className="post-link"
+                >
+                    <i
+                        className="fa fa-pencil"
+                        aria-hidden="true"
+                    />
+                </Link>
+            </div>
         </div>
     )
 }
