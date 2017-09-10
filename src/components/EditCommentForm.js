@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
         updateCommentForm:
         (attribute, value) => dispatch(Actions.updateCommentForm({ attribute, value })),
         updateComment:
-        (postId, body, author) => dispatch(Actions.updateComment(postId, body, author))
+        (postId, body) => dispatch(Actions.updateComment(postId, body))
     }
 }
 
@@ -28,7 +28,6 @@ class EditCommentForm extends Component {
 
     componentDidMount() {
         const { postId, commentId } = this.props.match.params
-        console.log(this.props.match)
         const { setActiveComment, match, updateCommentForm, comments } = this.props
         this.props.fetchComments(postId).then(() => {
             setActiveComment({ commentId })
@@ -44,7 +43,7 @@ class EditCommentForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const { updateComment, match, commentForm, history } = this.props
-        updateComment(match.params.commentId, commentForm.body, commentForm.author)
+        updateComment(match.params.commentId, commentForm.body)
         history.goBack()
     }
 

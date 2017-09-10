@@ -190,6 +190,11 @@ function comments(state = initialCommentsState, action) {
                 byId: {
                     ...state.byId,
                     [cId]: action.comment
+                },
+                commentForm: {
+                    ...state.commentForm,
+                    body: '',
+                    author: ''
                 }
             }
         case SET_ACTIVE_COMMENT:
@@ -205,9 +210,9 @@ function comments(state = initialCommentsState, action) {
                     [action.comment.id]: action.comment
                 },
                 commentForm: {
+                    ...state.commentForm,
                     body: '',
-                    author: '',
-                    parentId: ''
+                    author: ''
                 }
             }
         case DELETE_COMMENT:
