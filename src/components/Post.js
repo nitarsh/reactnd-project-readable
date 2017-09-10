@@ -34,6 +34,8 @@ class Post extends Component {
     }
 
     componentDidMount() {
+        console.log("Im here")
+        console.log(this.props)
         let postId = { postId: this.props.match.params.id }
         this._fetchPostsAndComments(postId)
     }
@@ -62,6 +64,14 @@ class Post extends Component {
                             <h1>
                                 {post.title}
                             </h1>
+                            <div>
+                                <span>
+                                    Author: {post.author}
+                                </span>
+                                <span>
+                                    Num comments: {commentList.length}
+                                </span>
+                            </div>
                             <div className="container column">
                                 <Link to="/" className="post-link">
                                     <i

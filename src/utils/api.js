@@ -48,25 +48,16 @@ export const updatePostScore = (id, isUpvote) =>
         body: JSON.stringify({ option: voteOptions[isUpvote] })
     }).then(res => res.json())
 
-export const updatePostTitle = (id, title) =>
+export const updatePost = (id, body, title) =>
     fetch(`${api}/posts/${id}`, {
         method: 'PUT',
         headers: {
             ...headers,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ title: title })
+        body: JSON.stringify({ body, title })
     }).then(res => res.json())
 
-export const updatePostBody = (id, body) =>
-    fetch(`${api}/posts/${id}`, {
-        method: 'PUT',
-        headers: {
-            ...headers,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ body: body })
-    }).then(res => res.json())
 
 export const deletePost = (id) =>
     fetch(`${api}/posts/${id}`, {

@@ -7,7 +7,8 @@ import {
     VOTE_COMMENT,
     VOTE_POST,
     UPDATE_POST_FORM,
-    DELETE_POST
+    DELETE_POST,
+    ADD_POST
 } from '../actions'
 
 const initialPostState = {
@@ -16,10 +17,10 @@ const initialPostState = {
     byCategory: {},
     active: '',
     postForm: {
-        id: '',
         title: '',
         body: '',
-        voteScore: 0
+        category: '',
+        author:''
     }
 }
 
@@ -28,7 +29,9 @@ function posts(state = initialPostState, action) {
         case SET_POSTS:
             let allPostIds = []
             let categories = [...new Set(action.posts.map(p => p.category))]
-            let postIdsByCategory = categories.reduce((s, c) => { s[c] = []; return s }, {})
+            let postIdsByCategory = categories.reduce(
+                (s, c) => { s[c] = []; return s }, {}
+            )
             let byId = {}
             for (let post of action.posts) {
                 allPostIds.push(post.id)

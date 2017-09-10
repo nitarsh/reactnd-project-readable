@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { Helmet } from "react-helmet"
 import './App.css'
 import Post from './Post'
-import PostForm from './PostForm'
-// import Home from './Home'
+import NewPostForm from './NewPostForm'
 import Category from './Category'
 
 class App extends Component {
@@ -15,13 +14,14 @@ class App extends Component {
                     <script src="https://use.fontawesome.com/9fdf74825d.js"></script>
                 </Helmet>
                 <Route exact path='/' component={Category} />
-                <Route exact path='/:category' component={Category} />
-                <Route exact path='/post/:id' component={Post} />
-                <Route exact path='/form/post/:mode' component={PostForm} />
+                <Switch>
+                    <Route exact path='/:category' component={Category} />
+                    <Route path='/:category/:id' component={Post} />
+                </Switch>
+                <Route exact path='/form/post/new' component={NewPostForm} />
             </div>
         )
     }
 }
-// <Route exact path='/category/:id' component={Category} />
 
 export default App

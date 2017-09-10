@@ -34,7 +34,7 @@ function PostOutline({ post, updateVoteScore, comments }) {
                 onClickFn={updateVoteScore}
             />
             <div className="container column">
-                <Link to={"/post/" + post.id} className="post-link">
+                <Link to={"/" + post.category + "/" + post.id} className="post-link">
                     <h2>{post.title}</h2>
                 </Link>
                 <div>
