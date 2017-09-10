@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Score } from './Misc'
 
-function PostOutlineList({ posts, updateVoteScore, comments }) {
+function PostOutlineList({ posts, updateVoteScore, comments, deletePost }) {
     return (
         <div className="post-list-wrapper">
             <Link to="/form/post/new" className="post-link">
@@ -16,6 +16,7 @@ function PostOutlineList({ posts, updateVoteScore, comments }) {
                             post={post}
                             updateVoteScore={updateVoteScore}
                             comments={comments[post.id]}
+                            deletePost={deletePost}
                         />
                     </li>
                 ))}
@@ -25,7 +26,8 @@ function PostOutlineList({ posts, updateVoteScore, comments }) {
 }
 
 
-function PostOutline({ post, updateVoteScore, comments }) {
+function PostOutline({ post, updateVoteScore, comments, deletePost }) {
+
     return (
         <div className="post-outline-wrapper container v-center compressed">
             <Score
@@ -52,6 +54,7 @@ function PostOutline({ post, updateVoteScore, comments }) {
                     className="fa fa-trash"
                     aria-hidden="true"
                     style={{ margin: 10 }}
+                    onClick={() => deletePost({ postId: post.id }).then(() => this.forceUpdate())}
                 />
             </div>
 

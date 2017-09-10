@@ -19,6 +19,7 @@ function mapDispatchToProps(dispatch) {
 class NewPostForm extends Component {
 
     componentDidMount() {
+        this.props.updatePostForm('category', 'react')
     }
 
     handleChange(event) {

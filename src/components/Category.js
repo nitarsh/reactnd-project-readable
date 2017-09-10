@@ -17,6 +17,7 @@ function mapDispatchToProps(dispatch) {
         fetchComments: (postId) => dispatch(Actions.fetchCommentsForPost(postId)),
         fetchCategories: () => dispatch(Actions.fetchCategoriesForHomePage()),
         fetchPosts: () => dispatch(Actions.fetchPosts()),
+        deletePost: (postId) => dispatch(Actions.deletePost(postId)),
         votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote }))
     }
 }
@@ -33,10 +34,8 @@ class Category extends Component {
     }
 
     _posts(posts, category) {
-        if (category)
-            return this._posts_filtered_by_category(posts, category)
-        else
-            return posts.allIds.map(id => posts.byId[id])
+        posts = category? this._posts_filtered_by_category(posts, category):posts.allIds.map(id => posts.byId[id])
+        return posts.filter(post => post.deleted===false)
     }
 
     _posts_filtered_by_category(posts, category) {
@@ -45,7 +44,7 @@ class Category extends Component {
     }
 
     render() {
-        const { categories, votePost, posts, match, comments } = this.props
+        const { categories, votePost, posts, match, comments, deletePost } = this.props
         const postList = this._posts(posts, match.params.category)
         return (
             <div className="container">
@@ -57,6 +56,7 @@ class Category extends Component {
                         posts={postList}
                         updateVoteScore={votePost}
                         comments={comments}
+                        deletePost={deletePost}
                     />
                 </section>
             </div>

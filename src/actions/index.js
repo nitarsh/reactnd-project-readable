@@ -15,6 +15,7 @@ export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
+export const DELETE_COMMENT_PARENT = 'DELETE_COMMENT_PARENT'
 
 export function setCategories({ categories }) {
     return { type: SET_CATEGORIES, categories }
@@ -47,6 +48,10 @@ export function addComment({ post, comment }) {
 export function deleteComment({ comment }) {
     return { type: DELETE_COMMENT, comment }
 }
+export function deleteCommentParent({ postId }) {
+    return { type: DELETE_COMMENT_PARENT, postId }
+}
+
 export function editComment({ comment }) {
     return { type: EDIT_COMMENT, comment }
 }
@@ -103,7 +108,8 @@ export function deletePost({ postId }) {
     return function (dispatch) {
         return API.deletePost(postId).then(
             dispatch(removePost({ postId }))
-        );
+        ).then(
+            dispatch(deleteCommentParent({ postId })));
     };
 }
 

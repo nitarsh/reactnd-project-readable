@@ -9,13 +9,14 @@ import {
     UPDATE_POST_FORM,
     DELETE_POST,
     ADD_POST,
-    EDIT_POST
+    EDIT_POST,
+    DELETE_COMMENT_PARENT
 } from '../actions'
 
 const initialPostState = {
     byId: {},
     allIds: [],
-    byCategory: {},
+    byCategory: { react: [], redux: [], udacity: [] },
     active: '',
     postForm: {
         title: '',
@@ -126,6 +127,10 @@ function comments(state = initialCommentsState, action) {
                     }
                 }
             }
+        case DELETE_COMMENT_PARENT:
+            state.byPost[action.postId].forEach(
+                cId => state.byId[cId].parentDeleted = true
+            )
         default:
             return state
     }
