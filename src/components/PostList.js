@@ -57,7 +57,7 @@ function PostOutline({ post, updateVoteScore, comments }) {
 
             <div className="container column">
                 <Link
-                    to="/form/post/edit"
+                    to={"/form/post/edit/" + post.id}
                     className="post-link"
                 >
                     <i

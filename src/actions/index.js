@@ -28,8 +28,8 @@ export function addPost({ post }) {
 export function removePost({ postId }) {
     return { type: DELETE_POST, postId }
 }
-export function editPost({ post }) {
-    return { type: EDIT_POST, post }
+export function editPost(postId, body, title) {
+    return { type: EDIT_POST, postId, body, title }
 }
 export function updatePostForm({ attribute, value }) {
     return { type: UPDATE_POST_FORM, attribute, value }
@@ -107,7 +107,7 @@ export function deletePost({ postId }) {
     };
 }
 
-export function createPost(post){
+export function createPost(post) {
     post.timestamp = Date.now()
     post.id = makeid()
 
@@ -123,9 +123,18 @@ function makeid() {
     // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
     var text = "";
     var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-  
+
     for (var i = 0; i < 22; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
     return text;
-  }
+}
+
+
+export function updatePost(postId, body, title) {
+    return function (dispatch) {
+        return API.updatePost(postId, body, title).then(
+            dispatch(editPost(postId, body, title))
+        );
+    };
+}

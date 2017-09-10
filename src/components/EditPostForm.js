@@ -6,19 +6,29 @@ const mapStateToProps = function (state) {
 
     return {
         postForm: state.posts.postForm,
+        post: state.posts.byId[state.posts.active]
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
+        setActivePost: (postId) => dispatch(Actions.setActivePost(postId)),
+        fetchPosts: () => dispatch(Actions.fetchPosts()),
         updatePostForm: (attribute, value) => dispatch(Actions.updatePostForm({ attribute, value })),
-        createPost: (post) => dispatch(Actions.createPost(post))
+        updatePost: (postId, body, title) => dispatch(Actions.updatePost(postId, body, title))
     }
 }
 
-class NewPostForm extends Component {
+class EditPostForm extends Component {
 
     componentDidMount() {
+        this.props.fetchPosts().then(() => {
+            this.props.setActivePost({ postId: this.props.match.params.id })
+            console.log(this.props.post)
+            console.log(this.props.match.params.id)
+            this.props.updatePostForm('title', this.props.post.title)
+            this.props.updatePostForm('body', this.props.post.body)
+        })
     }
 
     handleChange(event) {
@@ -28,7 +38,7 @@ class NewPostForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.createPost(this.props.postForm)
+        this.props.updatePost(this.props.match.params.id, this.props.postForm.body, this.props.postForm.title)
         this.props.history.goBack()
     }
 
@@ -47,33 +57,12 @@ class NewPostForm extends Component {
                         />
                     </label>
                     <label>
-                        Author:
-                    <input
-                            id="author"
-                            type="text"
-                            value={postForm.author}
-                            onChange={(event) => this.handleChange(event)}
-                        />
-                    </label>
-                    <label>
                         Body:
                         <textarea
                             id="body"
                             value={postForm.body}
                             onChange={(event) => this.handleChange(event)}
                         />
-                    </label>
-                    <label>
-                        Category:
-                        <select
-                            id="category"
-                            value={postForm.voteScore}
-                            onChange={(event) => this.handleChange(event)}
-                        >
-                            <option value="react">React</option>
-                            <option value="redux">Redux</option>
-                            <option value="udacity">Udacity</option>
-                        </select>
                     </label>
                     <input style={{ width: 100 }} type="submit" value="Submit" />
                 </div>
@@ -82,4 +71,4 @@ class NewPostForm extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewPostForm)
+export default connect(mapStateToProps, mapDispatchToProps)(EditPostForm)

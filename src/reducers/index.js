@@ -8,7 +8,8 @@ import {
     VOTE_POST,
     UPDATE_POST_FORM,
     DELETE_POST,
-    ADD_POST
+    ADD_POST,
+    EDIT_POST
 } from '../actions'
 
 const initialPostState = {
@@ -20,7 +21,7 @@ const initialPostState = {
         title: '',
         body: '',
         category: '',
-        author:''
+        author: ''
     }
 }
 
@@ -70,6 +71,15 @@ function posts(state = initialPostState, action) {
             }
         case DELETE_POST:
             state.byId[action.postId].deleted = true
+            return state
+        case ADD_POST:
+            state.byId[action.post.id] = action.post
+            state.byCategory[action.post.category].push(action.post.id)
+            state.allIds.push(action.post.id)
+            return state
+        case EDIT_POST:
+            state.byId[action.postId].title = action.title
+            state.byId[action.postId].body = action.body
             return state
         default:
             return state
