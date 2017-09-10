@@ -5,8 +5,9 @@ import * as Actions from '../actions'
 const mapStateToProps = function (state) {
 
     return {
-        commentForm: state.posts.commentForm,
-        comment: state.comments.byId[state.comment.active]
+        commentForm: state.comments.commentForm,
+        comment: state.comments.byId[state.comments.active],
+        comments: state.comments.byId
     }
 }
 
@@ -26,13 +27,12 @@ function mapDispatchToProps(dispatch) {
 class EditCommentForm extends Component {
 
     componentDidMount() {
-        this.props.fetchComments().then(() => {
-            const { setActiveComment, match, updateCommentForm, comment } = this.props
-            setActiveComment({ commentId: match.params.id })
-            console.log(comment)
-            console.log(match.params.id)
-            updateCommentForm('author', comment.title)
-            updateCommentForm('body', comment.body)
+        const { postId, commentId } = this.props.match.params
+        console.log(this.props.match)
+        const { setActiveComment, match, updateCommentForm, comments } = this.props
+        this.props.fetchComments(postId).then(() => {
+            setActiveComment({ commentId })
+            updateCommentForm('body', comments[commentId].body)
         })
     }
 
@@ -44,7 +44,7 @@ class EditCommentForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const { updateComment, match, commentForm, history } = this.props
-        updateComment(match.params.id, commentForm.body, commentForm.author)
+        updateComment(match.params.commentId, commentForm.body, commentForm.author)
         history.goBack()
     }
 
@@ -53,15 +53,6 @@ class EditCommentForm extends Component {
         return (
             <form onSubmit={event => this.handleSubmit(event)}>
                 <div className="post-wrapper container column">
-                    <label>
-                        Author:
-                        <input
-                            id="title"
-                            type="text"
-                            value={commentForm.author}
-                            onChange={(event) => this.handleChange(event)}
-                        />
-                    </label>
                     <label>
                         Body:
                         <textarea

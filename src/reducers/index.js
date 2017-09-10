@@ -14,7 +14,8 @@ import {
     UPDATE_COMMENT_FORM,
     ADD_COMMENT,
     SET_ACTIVE_COMMENT,
-    DELETE_COMMENT
+    DELETE_COMMENT,
+    EDIT_COMMENT
 } from '../actions'
 
 const initialPostState = {
@@ -33,12 +34,6 @@ const initialPostState = {
 function posts(state = initialPostState, action) {
     switch (action.type) {
         case SET_POSTS:
-            // state = initialPostState
-            // for (let post of action.posts) {
-            //     state.allIds.push(post.id)
-            //     state.byCategory[post.category].push(post.id)
-            //     state.byId[post.id] = post
-            // }
             let posts = action.posts
             const getIds = e => e.id
             return {
@@ -201,6 +196,17 @@ function comments(state = initialCommentsState, action) {
             return {
                 ...state,
                 active: action.commentId
+            }
+        case EDIT_COMMENT:
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.commentId]: {
+                        ...state.byId[action.commentId],
+                        body: action.body
+                    }
+                }
             }
         case DELETE_COMMENT:
             cId = action.commentId

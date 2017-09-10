@@ -22,7 +22,7 @@ class App extends Component {
                 </Switch>
                 <Route exact path='/form/post/new' component={NewPostForm} />
                 <Route exact path='/form/post/edit/:id' component={EditPostForm} />
-                <Route exact path='/form/comment/edit/:id' component={EditCommentForm} />
+                <Route exact path='/form/comment/edit/:postId/:commentId' component={EditCommentForm} />
             </div>
         )
     }

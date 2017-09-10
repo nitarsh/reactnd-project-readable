@@ -78,7 +78,7 @@ function Comment({ comment, voteComment, deleteComment }) {
 
                 <div className="container column">
                     <Link
-                        to={"/form/comment/edit/" + comment.id}
+                        to={"/form/comment/edit/" + comment.parentId + "/" + comment.id}
                         className="post-link"
                     >
                         <i

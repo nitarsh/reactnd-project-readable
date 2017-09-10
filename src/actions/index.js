@@ -40,7 +40,6 @@ export function updatePostForm({ attribute, value }) {
 export function votePost({ postId, vote }) {
     return { type: VOTE_POST, postId, vote }
 }
-
 export function setComments({ postId, comments }) {
     return { type: SET_COMMENTS, postId, comments }
 }
@@ -56,9 +55,8 @@ export function deleteCommentParent({ postId }) {
 export function updateCommentForm({ attribute, value }) {
     return { type: UPDATE_COMMENT_FORM, attribute, value }
 }
-
-export function editComment({ comment }) {
-    return { type: EDIT_COMMENT, comment }
+export function editComment(commentId, body) {
+    return { type: EDIT_COMMENT, commentId, body }
 }
 export function voteComment({ commentId, vote }) {
     return { type: VOTE_COMMENT, commentId, vote }
@@ -66,7 +64,6 @@ export function voteComment({ commentId, vote }) {
 export function setActivePost({ postId }) {
     return { type: SET_ACTIVE_POST, postId }
 }
-
 export function setActiveComment({ commentId }) {
     return { type: SET_ACTIVE_COMMENT, commentId }
 }
@@ -128,7 +125,7 @@ export function createPost(post) {
 
     return function (dispatch) {
         return API.createPost(post).then(
-            dispatch(addPost({ post }))
+            post => dispatch(addPost({ post }))
         );
     };
 }
@@ -160,15 +157,15 @@ export function createComment(comment) {
 
     return function (dispatch) {
         return API.createComment(comment).then(
-            dispatch(addComment({ comment }))
+            comment => dispatch(addComment({ comment }))
         );
     };
 }
 
 export function updateComment(commentId, body, author) {
     return function (dispatch) {
-        return API.updateComment(commentId, body, author).then(
-            dispatch(editComment(commentId, body, author))
+        return API.updateComment(commentId, body).then(
+            dispatch(editComment(commentId, body))
         );
     };
 }
