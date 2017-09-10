@@ -55,8 +55,8 @@ export function deleteCommentParent({ postId }) {
 export function updateCommentForm({ attribute, value }) {
     return { type: UPDATE_COMMENT_FORM, attribute, value }
 }
-export function editComment(commentId, body) {
-    return { type: EDIT_COMMENT, commentId, body }
+export function editComment(comment) {
+    return { type: EDIT_COMMENT, comment }
 }
 export function voteComment({ commentId, vote }) {
     return { type: VOTE_COMMENT, commentId, vote }
@@ -162,10 +162,10 @@ export function createComment(comment) {
     };
 }
 
-export function updateComment(commentId, body, author) {
+export function updateComment(commentId, body) {
     return function (dispatch) {
         return API.updateComment(commentId, body).then(
-            dispatch(editComment(commentId, body))
+            comment => dispatch(editComment(comment))
         );
     };
 }

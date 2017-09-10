@@ -202,10 +202,12 @@ function comments(state = initialCommentsState, action) {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.commentId]: {
-                        ...state.byId[action.commentId],
-                        body: action.body
-                    }
+                    [action.comment.id]: action.comment
+                },
+                commentForm: {
+                    body: '',
+                    author: '',
+                    parentId: ''
                 }
             }
         case DELETE_COMMENT:
