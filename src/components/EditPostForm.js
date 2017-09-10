@@ -24,8 +24,6 @@ class EditPostForm extends Component {
     componentDidMount() {
         this.props.fetchPosts().then(() => {
             this.props.setActivePost({ postId: this.props.match.params.id })
-            console.log(this.props.post)
-            console.log(this.props.match.params.id)
             this.props.updatePostForm('title', this.props.post.title)
             this.props.updatePostForm('body', this.props.post.body)
         })

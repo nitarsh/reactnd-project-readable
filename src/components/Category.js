@@ -27,15 +27,14 @@ class Category extends Component {
     componentDidMount() {
         this.props.fetchCategories()
         this.props.fetchPosts().then(() => {
-            this.props.posts.allIds.forEach(function(postId) {
-                this.props.fetchComments({postId})
+            this.props.posts.allIds.forEach(function (postId) {
+                this.props.fetchComments({ postId })
             }, this);
         })
     }
 
     _posts(posts, category) {
-        posts = category? this._posts_filtered_by_category(posts, category):posts.allIds.map(id => posts.byId[id])
-        return posts.filter(post => post.deleted===false)
+        return category ? this._posts_filtered_by_category(posts, category) : posts.allIds.map(id => posts.byId[id])
     }
 
     _posts_filtered_by_category(posts, category) {

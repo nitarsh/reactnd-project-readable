@@ -9,7 +9,8 @@ import { Score } from './Misc'
 const mapStateToProps = function (state) {
     return {
         post: state.posts.byId[state.posts.active],
-        comments: state.comments
+        comments: state.comments,
+        commentForm: state.comments.commentForm
     }
 }
 
@@ -20,7 +21,10 @@ function mapDispatchToProps(dispatch) {
         setActivePost: (postId) => dispatch(Actions.setActivePost(postId)),
         deletePost: (postId) => dispatch(Actions.deletePost(postId)),
         votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote })),
-        voteComment: (commentId, vote) => dispatch(Actions.voteOnComment({ commentId, vote }))
+        voteComment: (commentId, vote) => dispatch(Actions.voteOnComment({ commentId, vote })),
+        updateCommentForm: (attribute, value) => dispatch(Actions.updateCommentForm({ attribute, value })),
+        createComment: (comment) => dispatch(Actions.createComment(comment)),
+        deleteComment: (commentId) => dispatch(Actions.deleteComment(commentId)),
     }
 }
 
@@ -34,10 +38,9 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        console.log("Im here")
-        console.log(this.props)
         let postId = { postId: this.props.match.params.id }
         this._fetchPostsAndComments(postId)
+        this.props.updateCommentForm('parentId', postId.postId)
     }
 
     _comments_for_post(comments, postId) {
@@ -49,7 +52,7 @@ class Post extends Component {
     }
 
     render() {
-        const { comments, post, voteComment, votePost, match } = this.props
+        const { comments, post, voteComment, votePost, match, commentForm, updateCommentForm, createComment, deleteComment } = this.props
         const commentList = this._comments_for_post(comments, match.params.id)
         return (
             <div className="post-wrapper container column">
@@ -85,7 +88,7 @@ class Post extends Component {
 
                             <div className="container column">
                                 <Link
-                                    to="/form/post/edit"
+                                    to={"/form/post/edit/" + post.id}
                                     className="post-link"
                                 >
                                     <i
@@ -103,6 +106,10 @@ class Post extends Component {
                         <CommentList
                             comments={commentList}
                             voteComment={voteComment}
+                            commentForm={commentForm}
+                            updateCommentForm={updateCommentForm}
+                            createComment={createComment}
+                            deleteComment={deleteComment}
                         />
                     </div>
                 )}

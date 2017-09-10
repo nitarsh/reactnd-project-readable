@@ -10,7 +10,11 @@ import {
     DELETE_POST,
     ADD_POST,
     EDIT_POST,
-    DELETE_COMMENT_PARENT
+    DELETE_COMMENT_PARENT,
+    UPDATE_COMMENT_FORM,
+    ADD_COMMENT,
+    SET_ACTIVE_COMMENT,
+    DELETE_COMMENT
 } from '../actions'
 
 const initialPostState = {
@@ -29,22 +33,25 @@ const initialPostState = {
 function posts(state = initialPostState, action) {
     switch (action.type) {
         case SET_POSTS:
-            let allPostIds = []
-            let categories = [...new Set(action.posts.map(p => p.category))]
-            let postIdsByCategory = categories.reduce(
-                (s, c) => { s[c] = []; return s }, {}
-            )
-            let byId = {}
-            for (let post of action.posts) {
-                allPostIds.push(post.id)
-                postIdsByCategory[post.category].push(post.id)
-                byId[post.id] = post
-            }
+            // state = initialPostState
+            // for (let post of action.posts) {
+            //     state.allIds.push(post.id)
+            //     state.byCategory[post.category].push(post.id)
+            //     state.byId[post.id] = post
+            // }
+            let posts = action.posts
+            const getIds = e => e.id
             return {
                 ...state,
-                byId: byId,
-                allIds: allPostIds,
-                byCategory: postIdsByCategory
+                byId: posts.reduce(
+                    (s, e) => { s[e.id] = e; return s }
+                    , {}),
+                byCategory: {
+                    react: posts.filter(p => p.category === 'react').map(getIds),
+                    redux: posts.filter(p => p.category === 'redux').map(getIds),
+                    udacity: posts.filter(p => p.category === 'udacity').map(getIds)
+                },
+                allIds: posts.map(getIds)
             }
         case SET_ACTIVE_POST:
             return {
@@ -71,17 +78,44 @@ function posts(state = initialPostState, action) {
                 }
             }
         case DELETE_POST:
-            state.byId[action.postId].deleted = true
-            return state
+            let cat = state.byId[action.postId].category
+            const fFn = e => e !== action.postId
+            return {
+                ...state,
+                active: '',
+                allIds: state.allIds.filter(fFn),
+                byCategory: {
+                    ...state.byCategory,
+                    [cat]: state.byCategory[cat].filter(fFn)
+                },
+            }
         case ADD_POST:
-            state.byId[action.post.id] = action.post
-            state.byCategory[action.post.category].push(action.post.id)
-            state.allIds.push(action.post.id)
-            return state
+            cat = action.post.category
+            const postId = action.post.id
+            return {
+                ...state,
+                allIds: state.allIds.concat(postId),
+                byCategory: {
+                    ...state.byCategory,
+                    [cat]: state.byCategory[cat].concat(postId)
+                },
+                byId: {
+                    ...state.byId,
+                    [postId]: action.post
+                }
+            }
         case EDIT_POST:
-            state.byId[action.postId].title = action.title
-            state.byId[action.postId].body = action.body
-            return state
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.postId]: {
+                        ...state.byId[action.postId],
+                        title: action.title,
+                        body: action.body
+                    }
+                }
+            }
         default:
             return state
     }
@@ -98,7 +132,13 @@ function categories(state = [], action) {
 
 const initialCommentsState = {
     byId: {},
-    byPost: {}
+    byPost: {},
+    commentForm: {
+        body: '',
+        author: '',
+        parentId: ''
+    },
+    active: ''
 }
 
 function comments(state = initialCommentsState, action) {
@@ -128,9 +168,52 @@ function comments(state = initialCommentsState, action) {
                 }
             }
         case DELETE_COMMENT_PARENT:
-            state.byPost[action.postId].forEach(
-                cId => state.byId[cId].parentDeleted = true
-            )
+            return {
+                ...state,
+                byPost: {
+                    ...state.byPost,
+                    [action.postId]: []
+                }
+            }
+        case UPDATE_COMMENT_FORM:
+            return {
+                ...state,
+                commentForm: {
+                    ...state.commentForm,
+                    [action.attribute]: action.value
+                }
+            }
+        case ADD_COMMENT:
+            let cId = action.comment.id
+            let pId = action.comment.parentId
+            return {
+                ...state,
+                byPost: {
+                    ...state.byPost,
+                    [pId]: state.byPost[pId].concat(cId)
+                },
+                byId: {
+                    ...state.byId,
+                    [cId]: action.comment
+                }
+            }
+        case SET_ACTIVE_COMMENT:
+            return {
+                ...state,
+                active: action.commentId
+            }
+        case DELETE_COMMENT:
+            cId = action.commentId
+            pId = state.byId[cId].parentId
+            return {
+                ...state,
+                byPost: {
+                    ...state.byPost,
+                    [pId]: state.byPost[pId].filter(
+                        e => e !== cId
+                    )
+                }
+            }
         default:
             return state
     }

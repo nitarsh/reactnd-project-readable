@@ -13,9 +13,11 @@ export const VOTE_POST = 'VOTE_POST'
 export const SET_COMMENTS = 'SET_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
+export const UPDATE_COMMENT_FORM = 'UPDATE_COMMENT_FORM'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const DELETE_COMMENT_PARENT = 'DELETE_COMMENT_PARENT'
+export const SET_ACTIVE_COMMENT = 'SET_ACTIVE_COMMENT'
 
 export function setCategories({ categories }) {
     return { type: SET_CATEGORIES, categories }
@@ -42,14 +44,17 @@ export function votePost({ postId, vote }) {
 export function setComments({ postId, comments }) {
     return { type: SET_COMMENTS, postId, comments }
 }
-export function addComment({ post, comment }) {
-    return { type: ADD_COMMENT, post, comment }
+export function addComment({ comment }) {
+    return { type: ADD_COMMENT, comment }
 }
-export function deleteComment({ comment }) {
-    return { type: DELETE_COMMENT, comment }
+export function removeComment({ commentId }) {
+    return { type: DELETE_COMMENT, commentId }
 }
 export function deleteCommentParent({ postId }) {
     return { type: DELETE_COMMENT_PARENT, postId }
+}
+export function updateCommentForm({ attribute, value }) {
+    return { type: UPDATE_COMMENT_FORM, attribute, value }
 }
 
 export function editComment({ comment }) {
@@ -60,6 +65,10 @@ export function voteComment({ commentId, vote }) {
 }
 export function setActivePost({ postId }) {
     return { type: SET_ACTIVE_POST, postId }
+}
+
+export function setActiveComment({ commentId }) {
+    return { type: SET_ACTIVE_COMMENT, commentId }
 }
 
 export function fetchCategoriesForHomePage() {
@@ -73,7 +82,7 @@ export function fetchCategoriesForHomePage() {
 export function fetchPosts() {
     return function (dispatch) {
         return API.posts().then(
-            posts => dispatch(setPosts({ posts }))
+            posts => dispatch(setPosts({ posts: posts.filter(post => post.deleted === false) }))
         );
     };
 }
@@ -141,6 +150,33 @@ export function updatePost(postId, body, title) {
     return function (dispatch) {
         return API.updatePost(postId, body, title).then(
             dispatch(editPost(postId, body, title))
+        );
+    };
+}
+
+export function createComment(comment) {
+    comment.timestamp = Date.now()
+    comment.id = makeid()
+
+    return function (dispatch) {
+        return API.createComment(comment).then(
+            dispatch(addComment({ comment }))
+        );
+    };
+}
+
+export function updateComment(commentId, body, author) {
+    return function (dispatch) {
+        return API.updateComment(commentId, body, author).then(
+            dispatch(editComment(commentId, body, author))
+        );
+    };
+}
+
+export function deleteComment({ commentId }) {
+    return function (dispatch) {
+        return API.deleteComment(commentId).then(
+            dispatch(removeComment({ commentId }))
         );
     };
 }

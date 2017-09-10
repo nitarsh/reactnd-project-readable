@@ -5,6 +5,7 @@ import './App.css'
 import Post from './Post'
 import NewPostForm from './NewPostForm'
 import EditPostForm from './EditPostForm'
+import EditCommentForm from './EditCommentForm'
 import Category from './Category'
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
                 </Switch>
                 <Route exact path='/form/post/new' component={NewPostForm} />
                 <Route exact path='/form/post/edit/:id' component={EditPostForm} />
+                <Route exact path='/form/comment/edit/:id' component={EditCommentForm} />
             </div>
         )
     }

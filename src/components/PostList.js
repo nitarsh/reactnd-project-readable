@@ -11,7 +11,6 @@ function PostOutlineList({ posts, updateVoteScore, comments, deletePost }) {
             <ul className="post-list">
                 {posts.map((post) => (
                     <li key={post.id}>
-
                         <PostOutline
                             post={post}
                             updateVoteScore={updateVoteScore}
@@ -54,7 +53,7 @@ function PostOutline({ post, updateVoteScore, comments, deletePost }) {
                     className="fa fa-trash"
                     aria-hidden="true"
                     style={{ margin: 10 }}
-                    onClick={() => deletePost({ postId: post.id }).then(() => this.forceUpdate())}
+                    onClick={() => deletePost({ postId: post.id })}
                 />
             </div>
 
