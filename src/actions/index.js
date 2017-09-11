@@ -9,6 +9,8 @@ export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const UPDATE_POST_FORM = 'UPDATE_POST_FORM'
 export const VOTE_POST = 'VOTE_POST'
+export const SORT_POSTS = 'SORT_POSTS'
+
 
 export const SET_COMMENTS = 'SET_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
@@ -67,6 +69,10 @@ export function setActivePost({ postId }) {
 export function setActiveComment({ commentId }) {
     return { type: SET_ACTIVE_COMMENT, commentId }
 }
+export function sortPosts(sortBy) {
+    return { type: SORT_POSTS, sortBy }
+}
+
 
 export function fetchCategoriesForHomePage() {
     return function (dispatch) {

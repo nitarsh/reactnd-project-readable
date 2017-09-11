@@ -28,7 +28,7 @@ class EditCommentForm extends Component {
 
     componentDidMount() {
         const { postId, commentId } = this.props.match.params
-        const { setActiveComment, match, updateCommentForm, comments } = this.props
+        const { setActiveComment, updateCommentForm, comments } = this.props
         this.props.fetchComments(postId).then(() => {
             setActiveComment({ commentId })
             updateCommentForm('body', comments[commentId].body)

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import sortBy from 'sort-by'
 import {
     SET_POSTS,
     SET_ACTIVE_POST,
@@ -15,7 +16,8 @@ import {
     ADD_COMMENT,
     SET_ACTIVE_COMMENT,
     DELETE_COMMENT,
-    EDIT_COMMENT
+    EDIT_COMMENT,
+    SORT_POSTS
 } from '../actions'
 
 const initialPostState = {
@@ -28,14 +30,15 @@ const initialPostState = {
         body: '',
         category: '',
         author: ''
-    }
+    },
+    sortBy: '-voteScore'
 }
 
 function posts(state = initialPostState, action) {
     switch (action.type) {
         case SET_POSTS:
-            let posts = action.posts
-            const getIds = e => e.id
+            let posts = action.posts.sort(sortBy(state.sortBy))
+            let getIds = e => e.id
             return {
                 ...state,
                 byId: posts.reduce(
@@ -110,6 +113,23 @@ function posts(state = initialPostState, action) {
                         body: action.body
                     }
                 }
+            }
+        case SORT_POSTS:
+            posts = Object.values(state.byId).sort(sortBy(action.sortBy))
+            getIds = e => e.id
+            return {
+                ...state,
+                byId: posts.reduce(
+                    (s, e) => { s[e.id] = e; return s }
+                    , {}),
+                byCategory: {
+                    react: posts.filter(p => p.category === 'react').map(getIds),
+                    redux: posts.filter(p => p.category === 'redux').map(getIds),
+                    udacity: posts.filter(p => p.category === 'udacity').map(getIds)
+                },
+                allIds: posts.map(getIds),
+                sortBy: action.sortBy
+
             }
         default:
             return state

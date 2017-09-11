@@ -18,7 +18,8 @@ function mapDispatchToProps(dispatch) {
         fetchCategories: () => dispatch(Actions.fetchCategoriesForHomePage()),
         fetchPosts: () => dispatch(Actions.fetchPosts()),
         deletePost: (postId) => dispatch(Actions.deletePost(postId)),
-        votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote }))
+        votePost: (postId, vote) => dispatch(Actions.voteOnPost({ postId, vote })),
+        sortPosts: (sortBy) => dispatch(Actions.sortPosts(sortBy))
     }
 }
 
@@ -43,7 +44,7 @@ class Category extends Component {
     }
 
     render() {
-        const { categories, votePost, posts, match, comments, deletePost } = this.props
+        const { categories, votePost, posts, match, comments, deletePost, sortPosts } = this.props
         const postList = this._posts(posts, match.params.category)
         return (
             <div className="container">
@@ -56,6 +57,8 @@ class Category extends Component {
                         updateVoteScore={votePost}
                         comments={comments}
                         deletePost={deletePost}
+                        sortBy={posts.sortBy}
+                        sortPosts={sortPosts}
                     />
                 </section>
             </div>
