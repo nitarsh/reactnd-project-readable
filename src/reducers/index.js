@@ -17,7 +17,8 @@ import {
     SET_ACTIVE_COMMENT,
     DELETE_COMMENT,
     EDIT_COMMENT,
-    SORT_POSTS
+    SORT_POSTS,
+    SORT_COMMENTS
 } from '../actions'
 
 const initialPostState = {
@@ -153,19 +154,18 @@ const initialCommentsState = {
         author: '',
         parentId: ''
     },
-    active: ''
+    active: '',
+    sortBy: '-voteScore'
 }
 
 function comments(state = initialCommentsState, action) {
     switch (action.type) {
         case SET_COMMENTS:
-            let commentIds = action.comments.map(c => c.id)
-            action.comments.forEach(function (comment) {
-                if (comment.id)
-                    state.byId[comment.id] = comment
-            });
+            let commentIds = action.comments.sort(sortBy(state.sortBy)).map(c => c.id)
+            let c_map = action.comments.reduce((s, e) => { s[e.id] = e; return s }, {})
             return {
                 ...state,
+                byId: Object.assign({ ...state.byId }, c_map),
                 byPost: {
                     ...state.byPost,
                     [action.postId]: commentIds
@@ -238,14 +238,29 @@ function comments(state = initialCommentsState, action) {
         case DELETE_COMMENT:
             cId = action.commentId
             pId = state.byId[cId].parentId
+            delete state.byId[cId]
             return {
                 ...state,
+                byId: { ...state.byId },
                 byPost: {
                     ...state.byPost,
                     [pId]: state.byPost[pId].filter(
                         e => e !== cId
                     )
                 }
+            }
+        case SORT_COMMENTS:
+            let comments = Object.values(state.byId).sort(sortBy(action.sortBy))
+            let posts = Object.keys(state.byPost).reduce(
+                (s, e) => {
+                    s[e] = comments.filter(c => c.parentId === e).map(c => c.id);
+                    return s
+                }, {}
+            )
+            return {
+                ...state,
+                byPost: posts,
+                sortBy: action.sortBy
             }
         default:
             return state

@@ -10,7 +10,8 @@ const mapStateToProps = function (state) {
     return {
         post: state.posts.byId[state.posts.active],
         comments: state.comments,
-        commentForm: state.comments.commentForm
+        commentForm: state.comments.commentForm,
+        sortBy: state.comments.sortBy
     }
 }
 
@@ -25,6 +26,7 @@ function mapDispatchToProps(dispatch) {
         updateCommentForm: (attribute, value) => dispatch(Actions.updateCommentForm({ attribute, value })),
         createComment: (comment) => dispatch(Actions.createComment(comment)),
         deleteComment: (commentId) => dispatch(Actions.deleteComment(commentId)),
+        sortComments: (sortBy) => dispatch(Actions.sortComments(sortBy))
     }
 }
 
@@ -52,7 +54,7 @@ class Post extends Component {
     }
 
     render() {
-        const { comments, post, voteComment, votePost, match, commentForm, updateCommentForm, createComment, deleteComment } = this.props
+        const { comments, post, voteComment, votePost, match, commentForm, updateCommentForm, createComment, deleteComment, sortBy, sortComments } = this.props
         const commentList = this._comments_for_post(comments, match.params.id)
         return (
             <div className="post-wrapper container column">
@@ -110,6 +112,8 @@ class Post extends Component {
                             updateCommentForm={updateCommentForm}
                             createComment={createComment}
                             deleteComment={deleteComment}
+                            sortBy={sortBy}
+                            sortComments={sortComments}
                         />
                     </div>
                 )}

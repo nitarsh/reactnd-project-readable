@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Score } from './Misc'
+import { Score, Sorting } from './Misc'
 
-function CommentList({ comments, voteComment, commentForm, updateCommentForm, createComment, deleteComment }) {
+function CommentList({ comments, voteComment, commentForm, updateCommentForm, createComment, deleteComment, sortBy, sortComments }) {
 
     const handleChange = function (event) {
         const { id, value } = event.target
@@ -40,6 +40,10 @@ function CommentList({ comments, voteComment, commentForm, updateCommentForm, cr
                     <input style={{ width: 100 }} type="submit" value="Submit" />
                 </div>
             </form>
+            <Sorting
+                sortBy={sortBy}
+                sortFn={sortComments}
+            />
             <ul className="comment-list">
                 {comments.map((comment) => (
                     <li key={comment.id}>

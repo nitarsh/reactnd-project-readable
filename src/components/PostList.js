@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Score } from './Misc'
+import { Score, Sorting } from './Misc'
 
 function PostOutlineList({ posts, updateVoteScore, comments, deletePost, sortBy, sortPosts }) {
     return (
@@ -8,19 +8,10 @@ function PostOutlineList({ posts, updateVoteScore, comments, deletePost, sortBy,
             <Link to="/form/post/new" className="post-link">
                 <i className="fa fa-plus" aria-hidden="true"> Add New</i>
             </Link>
-            <label>
-                Sort By:
-            <select
-                    id="sort-by"
-                    value={sortBy}
-                    onChange={(event) => sortPosts(event.target.value)}
-                >
-                    <option value="-voteScore">Vote Score (descending)</option>
-                    <option value="voteScore">Vote Score (ascending)</option>
-                    <option value="-timestamp">Timestamp (descending)</option>
-                    <option value="timestamp">Timestamp (ascending)</option>
-                </select>
-            </label>
+            <Sorting
+                sortBy={sortBy}
+                sortFn={sortPosts}
+            />
             <ol className="post-list">
                 {posts.map((post) => (
                     <li key={post.id}>

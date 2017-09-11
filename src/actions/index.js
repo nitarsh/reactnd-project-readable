@@ -20,6 +20,7 @@ export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const DELETE_COMMENT_PARENT = 'DELETE_COMMENT_PARENT'
 export const SET_ACTIVE_COMMENT = 'SET_ACTIVE_COMMENT'
+export const SORT_COMMENTS = 'SORT_COMMENTS'
 
 export function setCategories({ categories }) {
     return { type: SET_CATEGORIES, categories }
@@ -71,6 +72,9 @@ export function setActiveComment({ commentId }) {
 }
 export function sortPosts(sortBy) {
     return { type: SORT_POSTS, sortBy }
+}
+export function sortComments(sortBy) {
+    return { type: SORT_COMMENTS, sortBy }
 }
 
 
