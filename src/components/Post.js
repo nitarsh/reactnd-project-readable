@@ -53,11 +53,23 @@ class Post extends Component {
         this.props.deletePost({ postId })
     }
 
+    goBack() {
+        this.props.history.goBack()
+    }
+
     render() {
         const { comments, post, voteComment, votePost, match, commentForm, updateCommentForm, createComment, deleteComment, sortBy, sortComments } = this.props
         const commentList = this._comments_for_post(comments, match.params.id)
         return (
             <div className="post-wrapper container column">
+                <div>
+                    <i
+                        className="fa fa-arrow-left"
+                        aria-hidden="true"
+                        onClick={() => this.goBack()}
+                        style={{ margin: 10 }}
+                    />
+                </div>
                 {post && (
                     <div>
                         <div className="post-header container row v-center">
