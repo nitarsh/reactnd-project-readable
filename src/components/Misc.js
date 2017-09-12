@@ -2,7 +2,7 @@ import React from 'react'
 
 export function Score({ id, value, onClickFn }) {
     return (
-        <div className="container column">
+        <div className="container column score-wrapper h-center">
             <i
                 className="fa fa-arrow-up"
                 aria-hidden="true"
@@ -20,18 +20,20 @@ export function Score({ id, value, onClickFn }) {
 
 export function Sorting({ sortBy, sortFn }) {
     return (
-        <label>
-            Sort By:
+        <div>
+            <label>
+                Sort By:
     <select
-                id="sort-by"
-                value={sortBy}
-                onChange={(event) => sortFn(event.target.value)}
-            >
-                <option value="-voteScore">Vote Score (descending)</option>
-                <option value="voteScore">Vote Score (ascending)</option>
-                <option value="-timestamp">Timestamp (descending)</option>
-                <option value="timestamp">Timestamp (ascending)</option>
-            </select>
-        </label>
+                    id="sort-by"
+                    value={sortBy}
+                    onChange={(event) => sortFn(event.target.value)}
+                >
+                    <option value="-voteScore">Vote Score (descending)</option>
+                    <option value="voteScore">Vote Score (ascending)</option>
+                    <option value="-timestamp">Timestamp (descending)</option>
+                    <option value="timestamp">Timestamp (ascending)</option>
+                </select>
+            </label>
+        </div>
     )
 }

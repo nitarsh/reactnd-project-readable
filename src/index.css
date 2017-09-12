@@ -10,6 +10,7 @@ list-style: none;
 
 ol {
 list-style-type: none;
+padding: 0;
 }
 
 .container {
@@ -134,4 +135,19 @@ flex-shrink: 2;
 
 .shrink-3 {
 flex-shrink: 3;
+}
+
+
+/* app specific styles */
+
+.light-grey-back{
+  background-color: rgb(250, 250, 250);
+}
+
+.post-list-item-title{
+  width: 500px;
+}
+
+.score-wrapper{
+  margin: 20px;
 }

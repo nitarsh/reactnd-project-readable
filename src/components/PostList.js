@@ -12,7 +12,7 @@ function PostOutlineList({ posts, updateVoteScore, comments, deletePost, sortBy,
                 sortBy={sortBy}
                 sortFn={sortPosts}
             />
-            <ol className="post-list">
+            <ol className="post-list light-grey-back">
                 {posts.map((post) => (
                     <li key={post.id}>
                         <PostOutline
@@ -38,7 +38,7 @@ function PostOutline({ post, updateVoteScore, comments, deletePost }) {
                 value={post.voteScore}
                 onClickFn={updateVoteScore}
             />
-            <div className="container column">
+            <div className="container column post-list-item-title">
                 <Link to={"/" + post.category + "/" + post.id} className="post-link">
                     <h2>{post.title}</h2>
                 </Link>
