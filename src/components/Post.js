@@ -81,14 +81,6 @@ class Post extends Component {
                             <h1>
                                 {post.title}
                             </h1>
-                            <div>
-                                <span>
-                                    Author: {post.author}
-                                </span>
-                                <span>
-                                    Num comments: {commentList.length}
-                                </span>
-                            </div>
                             <div className="container column">
                                 <Link to="/" className="post-link">
                                     <i
@@ -112,7 +104,16 @@ class Post extends Component {
                                 </Link>
                             </div>
                         </div>
+                        <div className="container column">
+                            <span>
+                                Author: {post.author}
+                            </span>
+                            <span>
+                                Comments: {commentList.length}
+                            </span>
+                        </div>
                         <div className="post-body">
+
                             <p>
                                 {post.body}
                             </p>

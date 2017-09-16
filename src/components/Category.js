@@ -62,9 +62,11 @@ class Category extends Component {
                         />
                     </section>
                 )}
-                <section className="sidebar">
-                    <CategoryList categories={categories} />
-                </section>
+                {(!match.params.category) && (
+                    <section className="sidebar">
+                        <CategoryList categories={categories} />
+                    </section>
+                )}
                 <section className="main">
                     <PostList
                         posts={postList}

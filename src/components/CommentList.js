@@ -17,6 +17,11 @@ function CommentList({ comments, voteComment, commentForm, updateCommentForm, cr
     return (
         <div className="comment-list-wrapper">
             <h3>Comments:</h3>
+            <Sorting
+                sortBy={sortBy}
+                sortFn={sortComments}
+            />
+            <br />
             <form onSubmit={event => handleSubmit(event)}>
                 <div className="post-wrapper container row">
                     <label>
@@ -37,13 +42,10 @@ function CommentList({ comments, voteComment, commentForm, updateCommentForm, cr
                             onChange={(event) => handleChange(event)}
                         />
                     </label>
-                    <input style={{ width: 100 }} type="submit" value="Submit" />
+                    <input style={{ width: 100 }} type="submit" value="Create New" />
                 </div>
             </form>
-            <Sorting
-                sortBy={sortBy}
-                sortFn={sortComments}
-            />
+
             <ul className="comment-list">
                 {comments.map((comment) => (
                     <li key={comment.id}>
