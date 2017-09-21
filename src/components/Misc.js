@@ -37,3 +37,12 @@ export function Sorting({ sortBy, sortFn }) {
         </div>
     )
 }
+
+export function NotFound() {
+    return (
+        <div className="container column">
+            <h1>404 Not Found</h1>
+            <p>Please go back and choose the right page</p>
+        </div>
+    )
+}

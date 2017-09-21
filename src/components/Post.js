@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as Actions from '../actions'
 import CommentList from './CommentList'
-import { Score } from './Misc'
+import { Score, NotFound } from './Misc'
 // import Modal from 'react-modal'
 
 const mapStateToProps = function (state) {
@@ -130,6 +130,7 @@ class Post extends Component {
                         />
                     </div>
                 )}
+                {!post && (<NotFound />)}
             </div>
         )
     }

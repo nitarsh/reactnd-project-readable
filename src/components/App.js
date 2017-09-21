@@ -7,6 +7,7 @@ import NewPostForm from './NewPostForm'
 import EditPostForm from './EditPostForm'
 import EditCommentForm from './EditCommentForm'
 import Category from './Category'
+import { NotFound } from './Misc'
 
 class App extends Component {
     render() {
@@ -15,14 +16,18 @@ class App extends Component {
                 <Helmet>
                     <script src="https://use.fontawesome.com/9fdf74825d.js"></script>
                 </Helmet>
-                <Route exact path='/' component={Category} />
                 <Switch>
+                    <Route exact path='/' component={Category} />
                     <Route exact path='/:category' component={Category} />
+                    
                     <Route exact path='/:category/:id' component={Post} />
+
+                    <Route exact path='/form/post/new' component={NewPostForm} />
+                    <Route exact path='/form/post/edit/:id' component={EditPostForm} />
+                    <Route exact path='/form/comment/edit/:postId/:commentId' component={EditCommentForm} />
+
+                    <Route component={NotFound} status={404} />
                 </Switch>
-                <Route exact path='/form/post/new' component={NewPostForm} />
-                <Route exact path='/form/post/edit/:id' component={EditPostForm} />
-                <Route exact path='/form/comment/edit/:postId/:commentId' component={EditCommentForm} />
             </div>
         )
     }
